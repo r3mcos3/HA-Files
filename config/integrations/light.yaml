@@ -1,3 +1,4 @@
+---
 light:
   - platform: switch
     name: Flood Light
