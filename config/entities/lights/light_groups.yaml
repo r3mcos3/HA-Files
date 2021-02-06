@@ -1,0 +1,36 @@
+---
+- platform: group
+  name: Backyard Group
+  entities:
+    - light.barn_led
+    - light.barn_light
+    - light.small_barn
+    - light.flood_light
+    - light.patio
+    - light.garden
+- platform: group
+  name: Garden
+  entities:
+    - light.garden_led_1
+    - light.garden_led_2
+    - light.garden_led_3
+    - light.garden_led_4
+- platform: group
+  name: Patio
+  entities:
+    - light.patio_led_1
+    - light.patio_led_2
+    - light.patio_led_3
+    - light.patio_led_4
+    - light.patio_led_5
+    - light.patio_led_6
+- platform: group
+  name: Livingroom Spots Group
+  entities:
+    - light.livingroom_spots_1
+    - light.livingroom_spots_2
+- platform: group
+  name: Attic
+  entities:
+    - light.attic_light_1
+    - light.attic_light_2

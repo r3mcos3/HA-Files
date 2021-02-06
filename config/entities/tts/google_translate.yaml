@@ -1,0 +1,6 @@
+---
+platform: google_translate
+language: 'nl'
+time_memory: 300
+cache: true
+cache_dir: /tmp/tts

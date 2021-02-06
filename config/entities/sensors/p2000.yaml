@@ -1,0 +1,6 @@
+---
+- platform: p2000
+  name: Tilburg
+  regios: 20,21,22
+  disciplines: 1,2,3,4
+  radius: 10000

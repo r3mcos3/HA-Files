@@ -1,0 +1,7 @@
+---
+- platform: switch
+  name: Flood Light
+  entity_id: switch.flood_light
+- platform: switch
+  name: Kitchen Spots
+  entity_id: switch.kitchen_switch
