@@ -1,0 +1,4 @@
+---
+platform: ffmpeg
+name: Reolink E1
+input: !secret reolink_url
