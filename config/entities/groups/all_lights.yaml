@@ -1,0 +1,17 @@
+---
+all_lights:
+  name: All Lights
+  entities:
+    - light.attic
+    - light.master_bedroom_light
+    - light.girls_room
+    - switch.santi_light_switch
+    - light.wled_elyza
+    - light.wled_santi
+    - light.basement_closet
+    - switch.toilet_light
+    - light.livingroom_spots_group
+    - light.kitchen_light
+    - light.kitchen_spots
+    - switch.closet_outlet
+    - light.backyard_group
