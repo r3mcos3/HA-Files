@@ -1,2 +1,14 @@
 input_boolean.heating_boost:
   device_class: heat
+binary_sensor.bathroom_window_sensor:
+  device_class: window
+binary_sensor.boys_room_window_sensor:
+  device_class: window
+binary_sensor.girls_room_window_sensor:
+  device_class: window
+binary_sensor.master_bedroom_sensor:
+  device_class: window
+binary_sensor.door_sensor_back:
+  device_class: door
+binary_sensor.door_sensor_front:
+  device_class: door
