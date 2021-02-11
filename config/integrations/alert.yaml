@@ -7,7 +7,7 @@ alert:
     entity_id: sensor.updater_core
     state: 'on'
     can_acknowledge: false
-    repeat: 
+    repeat:
     - 5
     - 360
     skip_first: true
