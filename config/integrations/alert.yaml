@@ -119,7 +119,7 @@ alert:
     title: "Updates available in {{ states('sensor.hacs') }} HACS repo{% if states('sensor.hacs') | int > 1 %}s{% endif %}"
     message: ""
     notifiers:
-        - mobile_app_in2023
+      - mobile_app_in2023
     data:
       tag: 'hacs-update-available'
       url: 'http://hassio.local/hacs/installed'
