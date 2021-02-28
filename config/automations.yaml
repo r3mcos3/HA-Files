@@ -1,1 +1,62 @@
-[]
+- id: '1614409181967'
+  alias: Notify - Door Window Open
+  description: ''
+  trigger:
+  - type: opened
+    platform: device
+    device_id: 2369c98ff6769132c689fde9d033f0c2
+    entity_id: binary_sensor.master_bedroom_sensor
+    domain: binary_sensor
+  - type: opened
+    platform: device
+    device_id: ed766a1c6af0c28a6fd0ba649fa29a90
+    entity_id: binary_sensor.girls_room_window_sensor
+    domain: binary_sensor
+  - type: opened
+    platform: device
+    device_id: 58240f343c47a1ec8eb90fcc65912446
+    entity_id: binary_sensor.boys_room_window_sensor
+    domain: binary_sensor
+  - type: opened
+    platform: device
+    device_id: 90be3e2be0dc0b2721fd3fc479128b36
+    entity_id: binary_sensor.bathroom_window_sensor
+    domain: binary_sensor
+  - platform: state
+    entity_id: binary_sensor.door_sensor_back
+    to: 'on'
+  - type: opened
+    platform: device
+    device_id: 53d44eb3c2e1289e5e52183d88854c7c
+    entity_id: binary_sensor.door_sensor_front
+    domain: binary_sensor
+  condition:
+  - condition: state
+    entity_id: input_boolean.house_occupied
+    state: 'off'
+  action:
+  - service: notify.mobile_app_in2023
+    data:
+      message: '"{{ trigger.to_state.name }}"  is open!!'
+      title: HA Event
+  mode: single
+- id: '1614515728598'
+  alias: Notify - Window Open
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.house_occupied
+    to: 'off'
+  condition: []
+  action:
+  - service: notify.mobile_app_in2023
+    data:
+      message: This window(s) are still open! {{ expand('group.all_windows') | selectattr('state',
+        'eq', 'on') | map(attribute='name') | list | join(', ') }}
+      title: HA Event
+  - service: notify.mobile_app_iphone_van_marietje
+    data:
+      message: This window(s) are still open! {{ expand('group.all_windows') | selectattr('state',
+        'eq', 'on') | map(attribute='name') | list | join(', ') }}
+      title: HA Event
+  mode: single
