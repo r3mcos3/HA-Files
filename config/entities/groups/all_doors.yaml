@@ -1,0 +1,6 @@
+---
+all_doors:
+  name: All Doors
+  entities:
+    - binary_sensor.door_sensor_front
+    - binary_sensor.door_sensor_back

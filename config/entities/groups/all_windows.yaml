@@ -1,0 +1,8 @@
+---
+all_windows:
+  name: All Windows
+  entities:
+    - binary_sensor.bathroom_window_sensor
+    - binary_sensor.boys_room_window_sensor
+    - binary_sensor.girls_room_window_sensor
+    - binary_sensor.master_bedroom_sensor
