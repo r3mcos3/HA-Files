@@ -4,11 +4,16 @@ binary_sensor.bathroom_window_sensor:
   device_class: window
 binary_sensor.boys_room_window_sensor:
   device_class: window
+  friendly_name: Boys Room Window
 binary_sensor.girls_room_window_sensor:
   device_class: window
+  friendly_name: Girls Room Window
 binary_sensor.master_bedroom_sensor:
   device_class: window
+  friendly_name: Master Bedroom Window
 binary_sensor.door_sensor_back:
   device_class: door
+  friendly_name: Back Door
 binary_sensor.door_sensor_front:
   device_class: door
+  friendly_name: Front Door
