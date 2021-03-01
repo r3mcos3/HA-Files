@@ -33,6 +33,7 @@ config/.google.token
 config/google_calendars.yaml
 config/www/remco.jpg
 config/www/anne.jpg
+config/esphome/.gitignore
 
 # Ignore files created by IDE's
 .vscode
