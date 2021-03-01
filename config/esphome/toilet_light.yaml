@@ -13,9 +13,9 @@ wifi:
   password: !secret not_passwd
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
-  ap:
-    ssid: "!secret toilet_fallback_ssid"
-    password: "!secret toilet_fallback_passwd"
+ap:
+  ssid: "!secret toilet_fallback_ssid"
+  password: "!secret toilet_fallback_passwd"
 
 captive_portal:
 
