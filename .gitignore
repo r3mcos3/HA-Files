@@ -34,8 +34,6 @@ config/google_calendars.yaml
 config/www/remco.jpg
 config/www/anne.jpg
 
-# Ignore add-on files
-
 # Ignore files created by IDE's
 .vscode
 .theia
@@ -43,3 +41,7 @@ config/www/anne.jpg
 
 # Specific keeps
 !.gitkeep
+
+# ESPHome ignores
+config/esphome/secrets.yaml
+config/esphome/**/
