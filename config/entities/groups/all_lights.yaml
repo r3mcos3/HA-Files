@@ -9,7 +9,7 @@ all_lights:
     - light.wled_elyza
     - light.wled_santi
     - light.basement_closet
-    - switch.toilet_light
+    - light.toilet_light
     - light.livingroom_spots_group
     - light.kitchen_light
     - light.kitchen_spots
