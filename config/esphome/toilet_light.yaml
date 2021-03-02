@@ -4,13 +4,13 @@ substitutions:
   upper_devicename: Toilet Light
 
 esphome:
-  name: toilet_light
+  name: $devicename
   platform: ESP8266
   board: esp01_1m
 
 wifi:
-  ssid: !secret not_ssid
-  password: !secret not_passwd
+  ssid: !secret wifi_ssid
+  password: !secret wifi_passwd
   ap:
     ssid: "!secret toilet_fallback_ssid"
     password: "!secret toilet_fallback_passwd"
@@ -48,3 +48,8 @@ light:
     id: $devicename
     name: $upper_devicename
     output: light_relay
+    
+text_sensor:
+  - platform: version
+    name: "ESPHome Version"
+    hide_timestamp: 'true'

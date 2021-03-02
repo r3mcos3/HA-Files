@@ -1,0 +1,76 @@
+---
+substitutions:
+  devicename: barn_outlet
+  upper_devicename: Barn Outlet
+
+esphome:
+  name: $devicename
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret wifi_outside_ssid
+  password: !secret wifi_passwd
+  ap:
+    ssid: "!secret barn_fallback_ssid"
+    password: "!secret barn_fallback_passwd"
+
+captive_portal:
+
+web_server:
+  port: 80
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+binary_sensor:
+  - platform: status
+    name: "$upper_devicename Status"
+  - platform: gpio
+    name: "$upper_devicename Button"
+    pin:
+      number: GPIO13
+      mode: INPUT_PULLUP
+      inverted: true
+    internal: true
+    on_press:
+      - switch.toggle: relay
+
+output:
+  - platform: esp8266_pwm
+    id: led
+    pin:
+      number: GPIO4
+      inverted: true
+
+light:
+  - platform: monochromatic
+    id: status_led
+    name: "$devicename Light"
+    output: led
+
+switch:
+  - platform: gpio
+    id: relay
+    pin: GPIO12
+  - platform: template
+    name: "$upper_devicename Relay"
+    optimistic: true
+    id: relay_and_light
+    turn_on_action:
+      - switch.turn_on: relay
+      - light.turn_on: status_led
+    turn_off_action:
+      - switch.turn_off: relay
+      - light.turn_off: status_led
+
+text_sensor:
+  - platform: version
+    name: "ESPHome Version"
+    hide_timestamp: 'true'
+
