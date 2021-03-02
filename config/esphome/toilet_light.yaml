@@ -48,7 +48,7 @@ light:
     id: $devicename
     name: $upper_devicename
     output: light_relay
-    
+
 text_sensor:
   - platform: version
     name: "ESPHome Version"
