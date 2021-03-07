@@ -1,0 +1,44 @@
+---
+blueprint:
+  name: IKEA Open/Close Remote
+  description: 'Control your roller blind with an IKEA 2 button remote (the square
+    ones).
+    this is the remote thats been delivered by the "Fytur" and " Kadrilj"
+    roller blinds.'
+  domain: automation
+  input:
+    remote:
+      name: Remote
+      description: IKEA remote to use
+      selector:
+        device:
+          integration: zha
+          model: TRADFRI open/close remote
+    cover:
+      name: Roller Blind
+      description: Roller blind to control
+      selector:
+        entity:
+          domain: cover
+  source_url: https://gist.github.com/r3mcos3/9534b849339e0558ca70ac5295238893
+mode: single
+max_exceeded: silent
+trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_id: !input 'remote'
+action:
+  - variables:
+      command: '{{ trigger.event.data.command }}'
+  - choose:
+      - conditions:
+          - '{{ command == ''up_open'' }}'
+        sequence:
+          - service: cover.open_cover
+            entity_id: !input 'cover'
+      - conditions:
+          - '{{ command == ''down_close'' }}'
+        sequence:
+          - service: cover.close_cover
+            entity_id: !input 'cover'
