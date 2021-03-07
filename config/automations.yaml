@@ -1,5 +1,5 @@
 - id: '1614409181967'
-  alias: Notify - Door Window Open
+  alias: Meldingen - Deur/Raam Open
   description: ''
   trigger:
   - type: opened
@@ -41,7 +41,7 @@
       title: HA Event
   mode: single
 - id: '1614515728598'
-  alias: Notify - Window Open
+  alias: Meldingen - Raam Open Niemand Thuis
   description: ''
   trigger:
   - platform: state
@@ -59,4 +59,635 @@
       message: This window(s) are still open! {{ expand('group.all_windows') | selectattr('state',
         'eq', 'on') | map(attribute='name') | list | join(', ') }}
       title: HA Event
+  mode: single
+- id: '1614882545713'
+  alias: Verlichting - Kelder
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.basement_motion
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - type: is_motion
+        condition: device
+        device_id: a9e0c2cb41777c7fae4800b6b7426370
+        entity_id: binary_sensor.basement_motion
+        domain: binary_sensor
+      sequence:
+      - type: turn_on
+        device_id: b440e812f8c2846d23d0023d534a1605
+        entity_id: light.basement_closet
+        domain: light
+    default:
+    - type: turn_off
+      device_id: b440e812f8c2846d23d0023d534a1605
+      entity_id: light.basement_closet
+      domain: light
+  mode: single
+- id: '1614888738245'
+  alias: Rolluik Bediening
+  description: ''
+  use_blueprint:
+    path: r3mcos3/ikea_open_close_remote.yaml
+    input:
+      remote: c8514645536108ef157103729e0cab36
+      cover: cover.master_bedroom
+- id: '1614889008427'
+  alias: Verlichting - Afstandsbediening Beneden
+  description: ''
+  use_blueprint:
+    path: Xelloss99/zha-ikea-tradfri-on-off-switch.yaml
+    input:
+      remote: 6de9c2a90f6a8fb847a299e6aee4c2a6
+      button_on_short:
+      - service: light.toggle
+        data: {}
+        target:
+          entity_id: light.livingroom_spots_group
+      button_off_short:
+      - type: toggle
+        device_id: ff5c0840f9c86a1f48604b60606f7a3c
+        entity_id: switch.closet_outlet
+        domain: switch
+      button_on_long:
+      - service: light.toggle
+        data: {}
+        target:
+          entity_id: light.livingroom_spots_1
+      button_off_long:
+      - service: light.toggle
+        data: {}
+        target:
+          entity_id: light.livingroom_spots_2
+- id: '1614974757950'
+  alias: Verlichting - Toilet
+  description: ''
+  use_blueprint:
+    path: homeassistant/motion_light.yaml
+    input:
+      motion_entity: binary_sensor.toilet_motion
+      light_target:
+        device_id: 9715ed7474a0b3fbcc329c8809305062
+      no_motion_wait: 180
+- id: '1615019766980'
+  alias: Verwarming Aan
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.heating_boost
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_boolean.heating_boost
+        state: 'on'
+      sequence:
+      - service: climate.set_temperature
+        target:
+          device_id: ed7c8f19573f4541479758fe83398ed5
+        data:
+          temperature: 25
+          hvac_mode: heat
+    default:
+    - service: climate.set_temperature
+      target:
+        device_id: ed7c8f19573f4541479758fe83398ed5
+      data:
+        hvac_mode: 'off'
+  mode: single
+- id: '1615019932777'
+  alias: Automatische Verwarming
+  description: ''
+  use_blueprint:
+    path: r3mcos3/heating.yaml
+    input:
+      time_before: '21:30:00'
+      heating: climate.woonkamer
+      temp_sensor: sensor.multi_downstairs_temp
+      min_temp: 19
+      set_temp: 22
+- id: '1615020314442'
+  alias: Volume Control
+  description: ''
+  use_blueprint:
+    path: r3mcos3/volume_control.yaml
+    input:
+      time_down: '20:30:00'
+      media:
+        device_id:
+        - 3eac10d861f156e9c1b2acc6cd73d21c
+        - 00dc3c9a61ba6fb4ebf79c4669d50a5c
+        - a0cd818df25f10c04e77aa2cf15f19df
+        - 3b3b20aef8ab19a70610c66d1c177711
+        - c699d6b7c891b371dfa48091dcc57958
+      time_up: 08:30:00
+- id: '1615021996643'
+  alias: Verlichting - Prullenbak
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.door_sensor_back
+  condition:
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
+  action:
+  - choose:
+    - conditions:
+      - type: is_open
+        condition: device
+        device_id: 3eb0d8d36bc313cf82d9ddb3343e5b04
+        entity_id: binary_sensor.door_sensor_back
+        domain: binary_sensor
+      sequence:
+      - service: light.turn_on
+        data:
+          brightness_pct: 100
+        target:
+          device_id:
+          - 0bec4d9ccbbd5f8801e0ea8596b45ad3
+          - 7e4c77efbf8615fb3788fd12de7ab771
+    - conditions:
+      - type: is_not_open
+        condition: device
+        device_id: 3eb0d8d36bc313cf82d9ddb3343e5b04
+        entity_id: binary_sensor.door_sensor_back
+        domain: binary_sensor
+      sequence:
+      - service: light.turn_off
+        target:
+          device_id:
+          - 0bec4d9ccbbd5f8801e0ea8596b45ad3
+          - 7e4c77efbf8615fb3788fd12de7ab771
+    default: []
+  mode: single
+- id: '1615022309251'
+  alias: Huis Status - Bewoond
+  description: ''
+  trigger:
+  - platform: zone
+    entity_id: device_tracker.in2023
+    zone: zone.home
+    event: enter
+  - platform: zone
+    entity_id: device_tracker.iphone_van_marietje
+    zone: zone.home
+    event: enter
+  - platform: state
+    entity_id: input_boolean.guest_mode
+  - platform: homeassistant
+    event: start
+  - platform: event
+    event_type: automation_reloaded
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: input_boolean.guest_mode
+          state: 'on'
+        - condition: state
+          entity_id: device_tracker.in2023
+          state: home
+        - condition: state
+          entity_id: device_tracker.iphone_van_marietje
+          state: home
+      sequence:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.house_occupied
+    default: []
+  mode: single
+- id: '1615022518086'
+  alias: Gasten Status Aan
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: device_tracker.gwendolyn
+  - platform: state
+    entity_id: device_tracker.carla
+  - platform: homeassistant
+    event: start
+  - platform: event
+    event_type: automation_reloaded
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: device_tracker.gwendolyn
+          state: home
+        - condition: state
+          entity_id: device_tracker.carla
+          state: home
+      sequence:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.guest_mode
+    default: []
+  mode: single
+- id: '1615023994616'
+  alias: Verlichting - Deurbel Gang
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.frontdoor_ding
+    to: 'on'
+  condition: []
+  action:
+  - service: light.turn_on
+    data:
+      brightness_pct: 100
+    target:
+      device_id: b18640df2e68c49006d9e16a72495f95
+  - delay:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
+  - service: light.turn_off
+    target:
+      device_id: b18640df2e68c49006d9e16a72495f95
+  mode: single
+- id: '1615024627811'
+  alias: Verlichting - Thuis Komen
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.house_occupied
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
+  action:
+  - service: light.turn_on
+    data: {}
+    target:
+      entity_id: light.livingroom_spots_group
+  - service: switch.turn_on
+    target:
+      device_id: ff5c0840f9c86a1f48604b60606f7a3c
+  - type: turn_on
+    device_id: b18640df2e68c49006d9e16a72495f95
+    entity_id: light.hallway
+    domain: light
+    brightness_pct: 100
+  - delay:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
+  - type: turn_off
+    device_id: b18640df2e68c49006d9e16a72495f95
+    entity_id: light.hallway
+    domain: light
+  mode: single
+- id: '1615037777771'
+  alias: Verlichting - Afstandsbediening Boven
+  description: ''
+  use_blueprint:
+    path: Xelloss99/zha-ikea-tradfri-on-off-switch.yaml
+    input:
+      remote: 3bf3cbd910f205d32977609a5d994b01
+      button_on_short:
+      - service: light.toggle
+        data:
+          brightness_pct: 100
+        target:
+          entity_id: light.girls_room
+      button_off_short:
+      - service: light.toggle
+        data:
+          brightness_pct: 100
+        target:
+          entity_id: light.master_bedroom_light
+      button_on_long:
+      - service: light.toggle
+        data:
+          effect: Colortwinkles
+        target:
+          entity_id: light.wled_elyza
+      button_off_long:
+      - service: light.toggle
+        data: {}
+        target:
+          entity_id: light.attic
+- id: '1615038524114'
+  alias: Verlichting - Nachtlampjes
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: light.wled_elyza
+  - platform: state
+    entity_id: light.wled_santi
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: device
+        type: is_on
+        device_id: d5ee29d7beb5899f6d65ceaf95dbdd76
+        entity_id: light.wled_elyza
+        domain: light
+      sequence:
+      - type: turn_on
+        device_id: d5ee29d7beb5899f6d65ceaf95dbdd76
+        entity_id: switch.wled_elyza_nightlight
+        domain: switch
+    - conditions:
+      - condition: device
+        type: is_on
+        device_id: b65dbb8a196ab5a4401b6c27bc17094f
+        entity_id: light.wled_santi
+        domain: light
+      sequence:
+      - type: turn_on
+        device_id: b65dbb8a196ab5a4401b6c27bc17094f
+        entity_id: switch.wled_santi_nightlight
+        domain: switch
+    default: []
+  mode: single
+- id: '1615054604869'
+  alias: Huis Status - Onbewoond
+  description: ''
+  trigger:
+  - platform: zone
+    entity_id: device_tracker.in2023
+    zone: zone.home
+    event: leave
+  - platform: zone
+    entity_id: device_tracker.iphone_van_marietje
+    zone: zone.home
+    event: leave
+  - platform: state
+    entity_id: input_boolean.guest_mode
+  - platform: homeassistant
+    event: start
+  - platform: event
+    event_type: automation_reloaded
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: device_tracker.in2023
+        state: not_home
+      - condition: state
+        entity_id: device_tracker.iphonevmarietje
+        state: not_home
+      - condition: state
+        entity_id: input_boolean.guest_mode
+        state: 'off'
+      sequence:
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.house_occupied
+    default: []
+  mode: single
+- id: '1615102425758'
+  alias: Verlichting - Alarm Ochtend
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.next_alarm
+    to: 'on'
+  condition: []
+  action:
+  - type: turn_on
+    device_id: ff5c0840f9c86a1f48604b60606f7a3c
+    entity_id: switch.closet_outlet
+    domain: switch
+  - type: turn_on
+    device_id: d2c7a7ba8860ff8c0107ee70a6f71453
+    entity_id: switch.kitchen_switch
+    domain: switch
+  mode: single
+- id: '1615106134848'
+  alias: Keuken - Schakelaar Lang Drukken
+  description: ''
+  trigger:
+  - platform: device
+    domain: tasmota
+    device_id: d2c7a7ba8860ff8c0107ee70a6f71453
+    type: button_long_press
+    subtype: button_1
+    discovery_id: D8F15BE77D0A_button_1_HOLD
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: light.backyard_group
+        state: 'on'
+      sequence:
+      - service: light.turn_off
+        target:
+          entity_id: light.backyard_group
+    - conditions:
+      - condition: state
+        entity_id: light.backyard_group
+        state: 'off'
+      sequence:
+      - service: light.turn_on
+        data: {}
+        target:
+          entity_id: light.backyard_group
+    default: []
+  mode: single
+- id: '1615106577599'
+  alias: 'Keuken - Schakelaar 4x Drukken '
+  description: ''
+  trigger:
+  - platform: device
+    domain: tasmota
+    device_id: d2c7a7ba8860ff8c0107ee70a6f71453
+    type: button_quadruple_press
+    subtype: button_1
+    discovery_id: D8F15BE77D0A_button_1_QUAD
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: device
+        type: is_on
+        device_id: ff5ec2b2fd4791a7e74389d08578b824
+        entity_id: light.kitchen_light
+        domain: light
+      sequence:
+      - type: turn_off
+        device_id: ff5ec2b2fd4791a7e74389d08578b824
+        entity_id: light.kitchen_light
+        domain: light
+    - conditions:
+      - condition: device
+        type: is_off
+        device_id: ff5ec2b2fd4791a7e74389d08578b824
+        entity_id: light.kitchen_light
+        domain: light
+      sequence:
+      - type: turn_on
+        device_id: ff5ec2b2fd4791a7e74389d08578b824
+        entity_id: light.kitchen_light
+        domain: light
+        brightness_pct: 100
+    default: []
+  mode: single
+- id: '1615106757926'
+  alias: Keuken - Schakelaar 2x Drukken
+  description: ''
+  trigger:
+  - platform: device
+    domain: tasmota
+    device_id: d2c7a7ba8860ff8c0107ee70a6f71453
+    type: button_double_press
+    subtype: button_1
+    discovery_id: D8F15BE77D0A_button_1_DOUBLE
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: light.patio
+        state: 'on'
+      sequence:
+      - service: light.turn_off
+        target:
+          entity_id: light.patio
+    - conditions:
+      - condition: state
+        entity_id: light.patio
+        state: 'off'
+      sequence:
+      - service: light.turn_on
+        data: {}
+        target:
+          entity_id: light.patio
+    default: []
+  mode: single
+- id: '1615107077638'
+  alias: Slaapkamer Santi - Schakelaar 2x Drukken
+  description: ''
+  trigger:
+  - platform: device
+    domain: tasmota
+    device_id: 2014b74380003033627da78ca479c340
+    type: button_double_press
+    subtype: button_1
+    discovery_id: 2CF432C02815_button_1_DOUBLE
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: device
+        type: is_on
+        device_id: b65dbb8a196ab5a4401b6c27bc17094f
+        entity_id: light.wled_santi
+        domain: light
+      sequence:
+      - type: turn_off
+        device_id: b65dbb8a196ab5a4401b6c27bc17094f
+        entity_id: light.wled_santi
+        domain: light
+    - conditions:
+      - condition: device
+        type: is_off
+        device_id: b65dbb8a196ab5a4401b6c27bc17094f
+        entity_id: light.wled_santi
+        domain: light
+      sequence:
+      - service: light.turn_on
+        data:
+          effect: Colortwinkles
+        target:
+          entity_id: light.wled_santi
+    default: []
+  mode: single
+- id: '1615114902306'
+  alias: Verlichting - Uit Niemand Thuis
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.house_occupied
+    to: 'off'
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: group.all_lights
+        state: 'on'
+      sequence:
+      - service: homeassistant.turn_off
+        target:
+          entity_id: group.all_lights
+      - service: notify.mobile_app_in2023
+        data:
+          message: Niemand Thuis, Alle Lichten Uitgezet!
+          title: HA Event
+    default: []
+  mode: single
+- id: '1615118999239'
+  alias: Verlichting - Wanneer Het Donker Wordt
+  description: ''
+  trigger:
+  - type: illuminance
+    platform: device
+    device_id: 9b78ba0ed3b179d6118bf651e2371fba
+    entity_id: sensor.lux
+    domain: sensor
+    below: 6
+  condition:
+  - condition: time
+    after: '12:00'
+    before: '20:00'
+  - condition: state
+    entity_id: input_boolean.house_occupied
+    state: 'on'
+  action:
+  - service: light.turn_on
+    data: {}
+    target:
+      entity_id:
+      - light.kitchen_spots
+      - light.livingroom_spots_group
+  - type: turn_on
+    device_id: ff5c0840f9c86a1f48604b60606f7a3c
+    entity_id: switch.closet_outlet
+    domain: switch
+  mode: single
+- id: '1615120691892'
+  alias: Gasten Status Uit
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: device_tracker.gwendolyn
+  - platform: state
+    entity_id: device_tracker.carla
+  - platform: homeassistant
+    event: start
+  - platform: event
+    event_type: automation_reloaded
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: device_tracker.gwendolyn
+        state: not_home
+      - condition: state
+        entity_id: device_tracker.carla
+        state: not_home
+      sequence:
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.guest_mode
+    default: []
   mode: single
