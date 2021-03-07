@@ -82,9 +82,9 @@ action:
             after: !input 'time_after'
           - condition: or
             conditions:
-            - condition: state
-              entity_id: !input 'boolean'
-              state: 'on'
+              - condition: state
+                entity_id: !input 'boolean'
+                state: 'on'
         sequence:
           - service: climate.set_temperature
             data:
