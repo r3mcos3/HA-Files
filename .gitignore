@@ -34,6 +34,7 @@ config/google_calendars.yaml
 config/www/remco.jpg
 config/www/anne.jpg
 config/esphome/.gitignore
+config/zigbee2mqtt
 
 # Ignore files created by IDE's
 .vscode
