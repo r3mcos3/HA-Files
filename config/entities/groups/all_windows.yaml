@@ -1,8 +1,8 @@
 ---
-all_windows:
-  name: All Windows
+alle_ramen:
+  name: Alle Ramen
   entities:
-    - binary_sensor.bathroom_window_sensor
-    - binary_sensor.boys_room_window_sensor
-    - binary_sensor.girls_room_window_sensor
-    - binary_sensor.master_bedroom_sensor
+    - binary_sensor.badkamer_raam
+    - binary_sensor.slaapkamer_raam
+    - binary_sensor.slaapkamer_raam_santi
+    - binary_sensor.slaapkamer_raam_elyza

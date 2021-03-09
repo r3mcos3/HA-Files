@@ -19,7 +19,7 @@ blueprint:
           domain: sensor
           device_class: temperature
     boolean:
-      name: House Occupies
+      name: House Occupied
       description: Boolean to set house mode.
       default: []
       selector:
@@ -71,6 +71,8 @@ trigger:
     at: !input 'time_after'
   - platform: time
     at: !input 'time_before'
+  - platform: state
+    entity_id: !input boolean
 action:
   - choose:
       - conditions:
@@ -91,8 +93,8 @@ action:
               entity_id: !input 'heating'
               hvac_mode: heat
               temperature: '{{ set_temp }}'
-        default:
-          - service: climate.turn_off
-            data:
-              entity_id: !input 'heating'
+    default:
+      - service: climate.turn_off
+        data:
+          entity_id: !input 'heating'
 mode: single

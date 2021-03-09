@@ -1,17 +1,17 @@
 ---
-all_lights:
-  name: All Lights
+alle_lichten:
+  name: Alle Lichten
   entities:
-    - light.attic
-    - light.master_bedroom_light
-    - light.girls_room
-    - switch.santi_light_switch
+    - light.zolder
+    - light.slaapkamer
+    - light.slaapkamer_elyza
+    - switch.schakelaar_santi
     - light.wled_elyza
     - light.wled_santi
-    - light.basement_closet
-    - light.toilet_light
-    - light.livingroom_spots_group
-    - light.kitchen_light
-    - light.kitchen_spots
-    - switch.closet_outlet
-    - light.backyard_group
+    - light.kelder_licht
+    - light.toilet_licht
+    - light.woonkamer_spotjes
+    - light.keuken_licht
+    - switch.keuken_schakelaar
+    - switch.kast
+    - light.tuin_groep

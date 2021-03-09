@@ -10,25 +10,25 @@
   - type: opened
     platform: device
     device_id: ed766a1c6af0c28a6fd0ba649fa29a90
-    entity_id: binary_sensor.girls_room_window_sensor
+    entity_id: binary_sensor.girls_room_raam_sensor
     domain: binary_sensor
   - type: opened
     platform: device
     device_id: 58240f343c47a1ec8eb90fcc65912446
-    entity_id: binary_sensor.boys_room_window_sensor
+    entity_id: binary_sensor.boys_room_raam_sensor
     domain: binary_sensor
   - type: opened
     platform: device
     device_id: 90be3e2be0dc0b2721fd3fc479128b36
-    entity_id: binary_sensor.bathroom_window_sensor
+    entity_id: binary_sensor.bathroom_raam_sensor_badkamer
     domain: binary_sensor
   - platform: state
-    entity_id: binary_sensor.door_sensor_back
+    entity_id: binary_sensor.achterdeur
     to: 'on'
   - type: opened
     platform: device
     device_id: 53d44eb3c2e1289e5e52183d88854c7c
-    entity_id: binary_sensor.door_sensor_front
+    entity_id: binary_sensor.voordeur
     domain: binary_sensor
   condition:
   - condition: state
@@ -51,12 +51,12 @@
   action:
   - service: notify.mobile_app_in2023
     data:
-      message: This window(s) are still open! {{ expand('group.all_windows') | selectattr('state',
+      message: Deze ramen staan nog open!! {{ expand('group.alle_ramen') | selectattr('state',
         'eq', 'on') | map(attribute='name') | list | join(', ') }}
       title: HA Event
   - service: notify.mobile_app_iphone_van_marietje
     data:
-      message: This window(s) are still open! {{ expand('group.all_windows') | selectattr('state',
+      message: Deze ramen staan nog open!! {{ expand('group.alle_ramen') | selectattr('state',
         'eq', 'on') | map(attribute='name') | list | join(', ') }}
       title: HA Event
   mode: single
@@ -65,7 +65,7 @@
   description: ''
   trigger:
   - platform: state
-    entity_id: binary_sensor.basement_motion
+    entity_id: binary_sensor.kelder_beweging
   condition: []
   action:
   - choose:
@@ -73,21 +73,22 @@
       - type: is_motion
         condition: device
         device_id: a9e0c2cb41777c7fae4800b6b7426370
-        entity_id: binary_sensor.basement_motion
+        entity_id: binary_sensor.kelder_beweging
         domain: binary_sensor
       sequence:
       - type: turn_on
         device_id: b440e812f8c2846d23d0023d534a1605
-        entity_id: light.basement_closet
+        entity_id: light.kelder_licht
         domain: light
+        brightness_pct: 100
     default:
     - type: turn_off
       device_id: b440e812f8c2846d23d0023d534a1605
-      entity_id: light.basement_closet
+      entity_id: light.kelder_licht
       domain: light
   mode: single
 - id: '1614888738245'
-  alias: Rolluik Bediening
+  alias: Rolgordijn Bediening
   description: ''
   use_blueprint:
     path: r3mcos3/ikea_open_close_remote.yaml
@@ -105,32 +106,34 @@
       - service: light.toggle
         data: {}
         target:
-          entity_id: light.livingroom_spots_group
+          entity_id: light.woonkamer_spotjes
       button_off_short:
       - type: toggle
         device_id: ff5c0840f9c86a1f48604b60606f7a3c
-        entity_id: switch.closet_outlet
+        entity_id: switch.kast
         domain: switch
       button_on_long:
       - service: light.toggle
         data: {}
         target:
-          entity_id: light.livingroom_spots_1
+          entity_id:
+          - light.woonkamer_spotjes_1
       button_off_long:
       - service: light.toggle
         data: {}
         target:
-          entity_id: light.livingroom_spots_2
+          entity_id:
+          - light.woonkamer_spotjes_2
 - id: '1614974757950'
   alias: Verlichting - Toilet
   description: ''
   use_blueprint:
     path: homeassistant/motion_light.yaml
     input:
-      motion_entity: binary_sensor.toilet_motion
+      motion_entity: binary_sensor.wc_beweging
+      no_motion_wait: 180
       light_target:
         device_id: 9715ed7474a0b3fbcc329c8809305062
-      no_motion_wait: 180
 - id: '1615019766980'
   alias: Verwarming Aan
   description: ''
@@ -158,17 +161,6 @@
       data:
         hvac_mode: 'off'
   mode: single
-- id: '1615019932777'
-  alias: Automatische Verwarming
-  description: ''
-  use_blueprint:
-    path: r3mcos3/heating.yaml
-    input:
-      time_before: '21:30:00'
-      heating: climate.woonkamer
-      temp_sensor: sensor.multi_downstairs_temp
-      min_temp: 19
-      set_temp: 22
 - id: '1615020314442'
   alias: Volume Control
   description: ''
@@ -189,7 +181,7 @@
   description: ''
   trigger:
   - platform: state
-    entity_id: binary_sensor.door_sensor_back
+    entity_id: binary_sensor.achterdeur
   condition:
   - condition: state
     entity_id: sun.sun
@@ -200,7 +192,7 @@
       - type: is_open
         condition: device
         device_id: 3eb0d8d36bc313cf82d9ddb3343e5b04
-        entity_id: binary_sensor.door_sensor_back
+        entity_id: binary_sensor.achterdeur
         domain: binary_sensor
       sequence:
       - service: light.turn_on
@@ -214,7 +206,7 @@
       - type: is_not_open
         condition: device
         device_id: 3eb0d8d36bc313cf82d9ddb3343e5b04
-        entity_id: binary_sensor.door_sensor_back
+        entity_id: binary_sensor.achterdeur
         domain: binary_sensor
       sequence:
       - service: light.turn_off
@@ -238,60 +230,28 @@
     event: enter
   - platform: state
     entity_id: input_boolean.guest_mode
-  - platform: homeassistant
-    event: start
-  - platform: event
-    event_type: automation_reloaded
+    to: 'on'
   condition: []
   action:
-  - choose:
-    - conditions:
-      - condition: or
-        conditions:
-        - condition: state
-          entity_id: input_boolean.guest_mode
-          state: 'on'
-        - condition: state
-          entity_id: device_tracker.in2023
-          state: home
-        - condition: state
-          entity_id: device_tracker.iphone_van_marietje
-          state: home
-      sequence:
-      - service: input_boolean.turn_on
-        target:
-          entity_id: input_boolean.house_occupied
-    default: []
-  mode: single
+  - service: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.house_occupied
+  mode: restart
 - id: '1615022518086'
   alias: Gasten Status Aan
   description: ''
   trigger:
   - platform: state
     entity_id: device_tracker.gwendolyn
+    to: home
   - platform: state
     entity_id: device_tracker.carla
-  - platform: homeassistant
-    event: start
-  - platform: event
-    event_type: automation_reloaded
+    to: home
   condition: []
   action:
-  - choose:
-    - conditions:
-      - condition: or
-        conditions:
-        - condition: state
-          entity_id: device_tracker.gwendolyn
-          state: home
-        - condition: state
-          entity_id: device_tracker.carla
-          state: home
-      sequence:
-      - service: input_boolean.turn_on
-        target:
-          entity_id: input_boolean.guest_mode
-    default: []
+  - service: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.guest_mode
   mode: single
 - id: '1615023994616'
   alias: Verlichting - Deurbel Gang
@@ -306,7 +266,7 @@
     data:
       brightness_pct: 100
     target:
-      device_id: b18640df2e68c49006d9e16a72495f95
+      entity_id: light.gang_licht
   - delay:
       hours: 0
       minutes: 5
@@ -314,15 +274,18 @@
       milliseconds: 0
   - service: light.turn_off
     target:
-      device_id: b18640df2e68c49006d9e16a72495f95
+      entity_id: light.gang_licht
   mode: single
 - id: '1615024627811'
   alias: Verlichting - Thuis Komen
   description: ''
   trigger:
   - platform: state
-    entity_id: input_boolean.house_occupied
-    to: 'on'
+    entity_id: device_tracker.in2023
+    to: home
+  - platform: state
+    entity_id: device_tracker.iphone_van_marietje
+    to: home
   condition:
   - condition: state
     entity_id: sun.sun
@@ -331,13 +294,14 @@
   - service: light.turn_on
     data: {}
     target:
-      entity_id: light.livingroom_spots_group
+      entity_id:
+      - light.woonkamer_spotjes
   - service: switch.turn_on
     target:
       device_id: ff5c0840f9c86a1f48604b60606f7a3c
   - type: turn_on
     device_id: b18640df2e68c49006d9e16a72495f95
-    entity_id: light.hallway
+    entity_id: light.gang_licht
     domain: light
     brightness_pct: 100
   - delay:
@@ -347,7 +311,7 @@
       milliseconds: 0
   - type: turn_off
     device_id: b18640df2e68c49006d9e16a72495f95
-    entity_id: light.hallway
+    entity_id: light.gang_licht
     domain: light
   mode: single
 - id: '1615037777771'
@@ -362,13 +326,14 @@
         data:
           brightness_pct: 100
         target:
-          entity_id: light.girls_room
+          entity_id:
+          - light.slaapkamer_elyza
       button_off_short:
       - service: light.toggle
         data:
           brightness_pct: 100
         target:
-          entity_id: light.master_bedroom_light
+          entity_id: light.slaapkamer_licht
       button_on_long:
       - service: light.toggle
         data:
@@ -379,7 +344,7 @@
       - service: light.toggle
         data: {}
         target:
-          entity_id: light.attic
+          entity_id: light.zolder
 - id: '1615038524114'
   alias: Verlichting - Nachtlampjes
   description: ''
@@ -429,28 +394,21 @@
     event: leave
   - platform: state
     entity_id: input_boolean.guest_mode
-  - platform: homeassistant
-    event: start
-  - platform: event
-    event_type: automation_reloaded
-  condition: []
+    to: 'off'
+  condition:
+  - condition: state
+    entity_id: device_tracker.in2023
+    state: not_home
+  - condition: state
+    entity_id: device_tracker.iphone_van_marietje
+    state: not_home
+  - condition: state
+    entity_id: input_boolean.guest_mode
+    state: 'off'
   action:
-  - choose:
-    - conditions:
-      - condition: state
-        entity_id: device_tracker.in2023
-        state: not_home
-      - condition: state
-        entity_id: device_tracker.iphonevmarietje
-        state: not_home
-      - condition: state
-        entity_id: input_boolean.guest_mode
-        state: 'off'
-      sequence:
-      - service: input_boolean.turn_off
-        target:
-          entity_id: input_boolean.house_occupied
-    default: []
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.house_occupied
   mode: single
 - id: '1615102425758'
   alias: Verlichting - Alarm Ochtend
@@ -463,11 +421,11 @@
   action:
   - type: turn_on
     device_id: ff5c0840f9c86a1f48604b60606f7a3c
-    entity_id: switch.closet_outlet
+    entity_id: switch.kast
     domain: switch
   - type: turn_on
     device_id: d2c7a7ba8860ff8c0107ee70a6f71453
-    entity_id: switch.kitchen_switch
+    entity_id: switch.keuken_schakelaar
     domain: switch
   mode: single
 - id: '1615106134848'
@@ -485,21 +443,23 @@
   - choose:
     - conditions:
       - condition: state
-        entity_id: light.backyard_group
+        entity_id: light.tuin_groep
         state: 'on'
       sequence:
       - service: light.turn_off
         target:
-          entity_id: light.backyard_group
+          entity_id:
+          - light.tuin_groep
     - conditions:
       - condition: state
-        entity_id: light.backyard_group
+        entity_id: light.tuin_groep
         state: 'off'
       sequence:
       - service: light.turn_on
         data: {}
         target:
-          entity_id: light.backyard_group
+          entity_id:
+          - light.tuin_groep
     default: []
   mode: single
 - id: '1615106577599'
@@ -517,27 +477,27 @@
   - choose:
     - conditions:
       - condition: device
-        type: is_on
-        device_id: ff5ec2b2fd4791a7e74389d08578b824
-        entity_id: light.kitchen_light
-        domain: light
-      sequence:
-      - type: turn_off
-        device_id: ff5ec2b2fd4791a7e74389d08578b824
-        entity_id: light.kitchen_light
-        domain: light
-    - conditions:
-      - condition: device
         type: is_off
         device_id: ff5ec2b2fd4791a7e74389d08578b824
-        entity_id: light.kitchen_light
+        entity_id: light.keuken_licht
         domain: light
       sequence:
       - type: turn_on
         device_id: ff5ec2b2fd4791a7e74389d08578b824
-        entity_id: light.kitchen_light
+        entity_id: light.keuken_licht
         domain: light
         brightness_pct: 100
+    - conditions:
+      - condition: device
+        type: is_on
+        device_id: ff5ec2b2fd4791a7e74389d08578b824
+        entity_id: light.keuken_licht
+        domain: light
+      sequence:
+      - type: turn_off
+        device_id: ff5ec2b2fd4791a7e74389d08578b824
+        entity_id: light.keuken_licht
+        domain: light
     default: []
   mode: single
 - id: '1615106757926'
@@ -669,25 +629,31 @@
   trigger:
   - platform: state
     entity_id: device_tracker.gwendolyn
+    to: not_home
   - platform: state
     entity_id: device_tracker.carla
-  - platform: homeassistant
-    event: start
-  - platform: event
-    event_type: automation_reloaded
-  condition: []
+    to: not_home
+  condition:
+  - condition: state
+    entity_id: device_tracker.gwendolyn
+    state: not_home
+  - condition: state
+    entity_id: device_tracker.carla
+    state: not_home
   action:
-  - choose:
-    - conditions:
-      - condition: state
-        entity_id: device_tracker.gwendolyn
-        state: not_home
-      - condition: state
-        entity_id: device_tracker.carla
-        state: not_home
-      sequence:
-      - service: input_boolean.turn_off
-        target:
-          entity_id: input_boolean.guest_mode
-    default: []
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.guest_mode
   mode: single
+- id: '1615123923151'
+  alias: Verwarming Auto
+  description: ''
+  use_blueprint:
+    path: r3mcos3/heating.yaml
+    input:
+      time_before: '21:30:00'
+      heating: climate.woonkamer
+      temp_sensor: sensor.multi_downstairs_temp
+      boolean: input_boolean.house_occupied
+      min_temp: 18
+      set_temp: 22

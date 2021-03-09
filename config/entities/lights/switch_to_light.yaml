@@ -1,7 +1,10 @@
 ---
 - platform: switch
-  name: Flood Light
-  entity_id: switch.flood_light
+  name: Groot Licht
+  entity_id: switch.groot_licht
 - platform: switch
   name: Kitchen Spots
   entity_id: switch.kitchen_switch
+- platform: switch
+  name: Schuur Led
+  entity_id: switch.schuur_stopcontact_relay
