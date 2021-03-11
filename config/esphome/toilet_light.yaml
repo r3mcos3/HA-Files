@@ -12,8 +12,8 @@ wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_passwd
   ap:
-    ssid: "!secret toilet_fallback_ssid"
-    password: "!secret toilet_fallback_passwd"
+    ssid: toilet_light
+    password: toilet1234
 
 captive_portal:
 

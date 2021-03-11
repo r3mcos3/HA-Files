@@ -12,8 +12,8 @@ wifi:
   ssid: !secret wifi_outside_ssid
   password: !secret wifi_passwd
   ap:
-    ssid: "!secret barn_fallback_ssid"
-    password: "!secret barn_fallback_passwd"
+    ssid: barn_light
+    password: barn1234
 
 captive_portal:
 
