@@ -30,6 +30,7 @@
   entities:
     - light.patio
     - light.tuin_led_groep
-    - light.schuur_licht
-    - light.licht_kleine_schuur
+    - light.kleine_schuur
+    - light.schuur
     - light.groot_licht
+    - light.schuur_led
