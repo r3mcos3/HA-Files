@@ -8,3 +8,10 @@
 - platform: switch
   name: Schuur Led
   entity_id: switch.schuur_stopcontact_relay
+- platform: switch
+  name: Woonkamer Spotjes 1
+  entity_id: switch.woonkamer_spotjes_1
+- platform: switch
+  name: Woonkamer Spotjes 2
+  entity_id: switch.woonkamer_spotjes_2
+
