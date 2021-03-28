@@ -1,3 +1,4 @@
+---
 blueprint:
   name: Low battery level detection & notification for all battery sensors
   description: Regularly test all sensors with 'battery' device-class for crossing
