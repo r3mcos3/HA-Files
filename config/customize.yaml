@@ -17,3 +17,5 @@ binary_sensor.door_sensor_back:
 binary_sensor.door_sensor_front:
   device_class: door
   friendly_name: Front Door
+input_boolean.rolluik:
+  device_class: garage_door
