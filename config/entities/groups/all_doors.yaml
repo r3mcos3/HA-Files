@@ -2,5 +2,5 @@
 alle_deuren:
   name: Alle Deuren
   entities:
-    - binary_sensor.voordeur
-    - binary_sensor.achterdeur
+    - binary_sensor.voor_deur
+    - binary_sensor.achter_deur

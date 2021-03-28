@@ -8,10 +8,10 @@ alle_lichten:
     - switch.schakelaar_santi
     - light.wled_elyza
     - light.wled_santi
-    - light.kelder_licht
+    - light.kelder
     - light.toilet_licht
     - light.woonkamer_spotjes
-    - light.keuken_licht
+    - light.keuken
     - switch.keuken_schakelaar
     - switch.kast
     - light.tuin_groep
