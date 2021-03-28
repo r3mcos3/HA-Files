@@ -28,47 +28,47 @@ api:
 ota:
 
 binary_sensor:
-- platform: gpio
-  pin:
-    number: GPIO10
-    inverted: true
-  id: button
-  on_press:
-    then:
-      # logic for cycling through movements: open->stop->close->stop->...
-      - lambda: |
-          if (id(my_cover).current_operation == COVER_OPERATION_IDLE) {
-            // Cover is idle, check current state and either open or close cover.
-            if (id(my_cover).is_fully_closed()) {
-              id(my_cover).open();
+  - platform: gpio
+    pin:
+      number: GPIO10
+      inverted: true
+    id: button
+    on_press:
+      then:
+        # logic for cycling through movements: open->stop->close->stop->...
+        - lambda: |
+            if (id(my_cover).current_operation == COVER_OPERATION_IDLE) {
+              // Cover is idle, check current state and either open or close cover.
+              if (id(my_cover).is_fully_closed()) {
+                id(my_cover).open();
+              } else {
+                id(my_cover).close();
+              }
             } else {
-              id(my_cover).close();
+              // Cover is opening/closing. Stop it.
+              id(my_cover).stop();
             }
-          } else {
-            // Cover is opening/closing. Stop it.
-            id(my_cover).stop();
-          }
 
 switch:
-- platform: gpio
-  pin: GPIO12
-  interlock: &interlock [open_cover, close_cover]
-  id: open_cover
-- platform: gpio
-  pin: GPIO5
-  interlock: *interlock
-  id: close_cover
+  - platform: gpio
+    pin: GPIO12
+    interlock: &interlock [open_cover, close_cover]
+    id: open_cover
+  - platform: gpio
+    pin: GPIO5
+    interlock: *interlock
+    id: close_cover
 
 cover:
-- platform: time_based
-  name: $upper_devicename
-  id: my_cover
-  open_action:
-    - switch.turn_on: open_cover
-  open_duration: 60s
-  close_action:
-    - switch.turn_on: close_cover
-  close_duration: 60s
-  stop_action:
-    - switch.turn_off: open_cover
-    - switch.turn_off: close_cover
+  - platform: time_based
+    name: $upper_devicename
+    id: my_cover
+    open_action:
+      - switch.turn_on: open_cover
+    open_duration: 60s
+    close_action:
+      - switch.turn_on: close_cover
+    close_duration: 60s
+    stop_action:
+      - switch.turn_off: open_cover
+      - switch.turn_off: close_cover
