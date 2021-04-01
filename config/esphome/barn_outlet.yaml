@@ -45,16 +45,16 @@ binary_sensor:
     #   - switch.toggle: relay
     on_multi_click:
       - timing:
-        - ON for 1s to 5s
-        - OFF for at least 0.5s
+          - ON for 1s to 5s
+          - OFF for at least 0.5s
         then:
           - homeassistant.service:
               service: light.toggle
               data:
                 entity_id: light.schuur, light.kleine_schuur
       - timing:
-        - ON for at most 1s
-        - OFF for at least 0.5s
+          - ON for at most 1s
+          - OFF for at least 0.5s
         then:
           - switch.toggle: relay
 

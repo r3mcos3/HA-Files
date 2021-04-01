@@ -42,16 +42,16 @@ binary_sensor:
     on_multi_click:
     # single
       - timing:
-        - ON for at most 1s
-        - OFF for at least 1s
+          - ON for at most 1s
+          - OFF for at least 1s
         then:
           - switch.toggle: relay
     # double
       - timing:
-        - ON for at most 1s
-        - OFF for at most 0.5s
-        - ON for 0.5s to 1s
-        - OFF for at least 0.2s
+          - ON for at most 1s
+          - OFF for at most 0.5s
+          - ON for 0.5s to 1s
+          - OFF for at least 0.2s
         then:
           - homeassistant.service:
               service: light.toggle
@@ -59,8 +59,8 @@ binary_sensor:
                 entity_id: light.keuken
     # hold
       - timing:
-        - ON for 1s to 5s
-        - OFF for at least 0.5s
+          - ON for 1s to 5s
+          - OFF for at least 0.5s
         then:
           - homeassistant.service:
               service: light.toggle
