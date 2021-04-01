@@ -1,7 +1,7 @@
 ---
 substitutions:
-  devicename: barn_outlet
-  upper_devicename: Schuur Stopcontact
+  devicename: lsc_outlet
+  upper_devicename: LSC Outlet
 
 esphome:
   name: $devicename
@@ -12,8 +12,8 @@ wifi:
   ssid: !secret wifi_outside_ssid
   password: !secret wifi_passwd
   ap:
-    ssid: barn_light
-    password: barn1234
+    ssid: lscoutlet
+    password: lscoutlet1234
 
 captive_portal:
 
@@ -37,26 +37,9 @@ binary_sensor:
       number: GPIO13
       mode: INPUT_PULLUP
       inverted: true
-    filters:
-      - delayed_on: 10ms
-      - delayed_off: 10ms
     internal: true
-    # on_press:
-    #   - switch.toggle: relay
-    on_multi_click:
-      - timing:
-        - ON for 1s to 5s
-        - OFF for at least 0.5s
-        then:
-          - homeassistant.service:
-              service: light.toggle
-              data:
-                entity_id: light.schuur, light.kleine_schuur
-      - timing:
-        - ON for at most 1s
-        - OFF for at least 0.5s
-        then:
-          - switch.toggle: relay
+    on_press:
+      - switch.toggle: relay
 
 output:
   - platform: esp8266_pwm
@@ -88,6 +71,7 @@ switch:
 
 text_sensor:
   - platform: version
-    name: "ESPHome Version"
+    name: "$upper_devicename ESPHome Version"
     hide_timestamp: 'true'
+
 

@@ -1,0 +1,78 @@
+---
+substitutions:
+  devicename: pow_r2
+  upper_devicename: Pow R2
+
+esphome:
+  name: $devicename
+  platform: ESP8266
+  board: esp01_1m
+  board_flash_mode: dout
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_passwd
+  ap:
+    ssid: pow_r2
+    password: powr21234
+
+captive_portal:
+
+web_server:
+  port: 80
+
+# Enable logging
+logger:
+  baud_rate: 0
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+uart:
+  rx_pin: RX
+  baud_rate: 4800
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+      inverted: 'true'
+    name: "$upper_devicename Button"
+    on_press:
+      - switch.toggle: relay
+
+switch:
+  - platform: gpio
+    id: relay
+    pin: GPIO12
+    name: "$upper_devicename Relay"
+
+sensor:
+  - platform: cse7766
+    update_interval: 10s
+    current:
+      name: "$upper_devicename Current"
+    voltage:
+      name: "$upper_devicename Voltage"
+    power:
+      name: "$upper_devicename Power"
+
+light:
+  - platform: monochromatic
+    name: "$upper_devicename Blue LED"
+    output: pow_blue_led
+    id: led
+
+output:
+  - platform: esp8266_pwm
+    id: pow_blue_led
+    pin:
+      number: GPIO13
+      inverted: 'true'
+
+text_sensor:
+  - platform: version
+    name: "$upper_devicename ESPHome Version"

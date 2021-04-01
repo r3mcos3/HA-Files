@@ -1,7 +1,7 @@
 ---
 substitutions:
-  devicename: barn_outlet
-  upper_devicename: Schuur Stopcontact
+  devicename: keuken_schakelaar
+  upper_devicename: Keuken Schakelaar
 
 esphome:
   name: $devicename
@@ -9,11 +9,11 @@ esphome:
   board: esp01_1m
 
 wifi:
-  ssid: !secret wifi_outside_ssid
+  ssid: !secret wifi_ssid
   password: !secret wifi_passwd
   ap:
-    ssid: barn_light
-    password: barn1234
+    ssid: keuken_schakelaar
+    password: keuken1234
 
 captive_portal:
 
@@ -29,21 +29,35 @@ api:
 ota:
 
 binary_sensor:
-  - platform: status
-    name: "$upper_devicename Status"
   - platform: gpio
     name: "$upper_devicename Button"
     pin:
-      number: GPIO13
+      number: GPIO0
       mode: INPUT_PULLUP
       inverted: true
     filters:
       - delayed_on: 10ms
       - delayed_off: 10ms
     internal: true
-    # on_press:
-    #   - switch.toggle: relay
     on_multi_click:
+    # single
+      - timing:
+        - ON for at most 1s
+        - OFF for at least 1s
+        then:
+          - switch.toggle: relay
+    # double
+      - timing:
+        - ON for at most 1s
+        - OFF for at most 0.5s
+        - ON for 0.5s to 1s
+        - OFF for at least 0.2s
+        then:
+          - homeassistant.service:
+              service: light.toggle
+              data:
+                entity_id: light.keuken
+    # hold
       - timing:
         - ON for 1s to 5s
         - OFF for at least 0.5s
@@ -51,43 +65,28 @@ binary_sensor:
           - homeassistant.service:
               service: light.toggle
               data:
-                entity_id: light.schuur, light.kleine_schuur
-      - timing:
-        - ON for at most 1s
-        - OFF for at least 0.5s
-        then:
-          - switch.toggle: relay
+                entity_id: light.tuin
 
 output:
   - platform: esp8266_pwm
-    id: led
-    pin:
-      number: GPIO4
-      inverted: true
+    id: blue_led
+    pin: GPIO13
+    inverted: 'true'
 
 light:
   - platform: monochromatic
-    id: status_led
-    name: "$devicename Light"
-    output: led
+    name: "$upper_devicename Wifi LED"
+    output: blue_led
+    internal: true
+    id: blue_led_light
 
 switch:
   - platform: gpio
     id: relay
     pin: GPIO12
-  - platform: template
     name: "$upper_devicename Relay"
-    optimistic: true
-    id: relay_and_light
-    turn_on_action:
-      - switch.turn_on: relay
-      - light.turn_on: status_led
-    turn_off_action:
-      - switch.turn_off: relay
-      - light.turn_off: status_led
 
 text_sensor:
   - platform: version
-    name: "ESPHome Version"
+    name: "$upper_devicename ESPHome Version"
     hide_timestamp: 'true'
-
