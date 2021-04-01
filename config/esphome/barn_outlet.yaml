@@ -90,4 +90,3 @@ text_sensor:
   - platform: version
     name: "ESPHome Version"
     hide_timestamp: 'true'
-
