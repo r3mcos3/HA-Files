@@ -425,44 +425,6 @@
     entity_id: switch.keuken_schakelaar_relay
     domain: switch
   mode: single
-- id: '1615107077638'
-  alias: Slaapkamer Santi - Schakelaar 2x Drukken
-  description: ''
-  trigger:
-  - platform: device
-    domain: tasmota
-    device_id: 2014b74380003033627da78ca479c340
-    type: button_double_press
-    subtype: button_1
-    discovery_id: 2CF432C02815_button_1_DOUBLE
-  condition: []
-  action:
-  - choose:
-    - conditions:
-      - condition: device
-        type: is_on
-        device_id: b65dbb8a196ab5a4401b6c27bc17094f
-        entity_id: light.wled_santi
-        domain: light
-      sequence:
-      - type: turn_off
-        device_id: b65dbb8a196ab5a4401b6c27bc17094f
-        entity_id: light.wled_santi
-        domain: light
-    - conditions:
-      - condition: device
-        type: is_off
-        device_id: b65dbb8a196ab5a4401b6c27bc17094f
-        entity_id: light.wled_santi
-        domain: light
-      sequence:
-      - service: light.turn_on
-        data:
-          effect: Colortwinkles
-        target:
-          entity_id: light.wled_santi
-    default: []
-  mode: single
 - id: '1615114902306'
   alias: Verlichting - Uit Niemand Thuis
   description: ''
