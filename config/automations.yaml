@@ -342,41 +342,6 @@
         data: {}
         target:
           entity_id: light.zolder
-- id: '1615038524114'
-  alias: Verlichting - Nachtlampjes
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: light.wled_elyza
-  - platform: state
-    entity_id: light.wled_santi
-  condition: []
-  action:
-  - choose:
-    - conditions:
-      - condition: device
-        type: is_on
-        device_id: d5ee29d7beb5899f6d65ceaf95dbdd76
-        entity_id: light.wled_elyza
-        domain: light
-      sequence:
-      - type: turn_on
-        device_id: d5ee29d7beb5899f6d65ceaf95dbdd76
-        entity_id: switch.wled_elyza_nightlight
-        domain: switch
-    - conditions:
-      - condition: device
-        type: is_on
-        device_id: b65dbb8a196ab5a4401b6c27bc17094f
-        entity_id: light.wled_santi
-        domain: light
-      sequence:
-      - type: turn_on
-        device_id: b65dbb8a196ab5a4401b6c27bc17094f
-        entity_id: switch.wled_santi_nightlight
-        domain: switch
-    default: []
-  mode: restart
 - id: '1615054604869'
   alias: Huis Status - Onbewoond
   description: ''
@@ -613,3 +578,58 @@
     entity_id: light.gang
     domain: light
   mode: single
+- id: '1617606747056'
+  alias: Verlichting - Nachtlamp
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: light.wled_elyza
+  - platform: state
+    entity_id: light.wled_santi
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: device
+        type: is_on
+        device_id: d5ee29d7beb5899f6d65ceaf95dbdd76
+        entity_id: light.wled_elyza
+        domain: light
+        for:
+          hours: 0
+          minutes: 0
+          seconds: 0
+          milliseconds: 0
+      sequence:
+      - delay:
+          hours: 0
+          minutes: 30
+          seconds: 0
+          milliseconds: 0
+      - type: turn_off
+        device_id: d5ee29d7beb5899f6d65ceaf95dbdd76
+        entity_id: light.wled_elyza
+        domain: light
+    - conditions:
+      - condition: device
+        type: is_on
+        device_id: b65dbb8a196ab5a4401b6c27bc17094f
+        entity_id: light.wled_santi
+        domain: light
+        for:
+          hours: 0
+          minutes: 0
+          seconds: 0
+          milliseconds: 0
+      sequence:
+      - delay:
+          hours: 0
+          minutes: 30
+          seconds: 0
+          milliseconds: 0
+      - type: turn_off
+        device_id: b65dbb8a196ab5a4401b6c27bc17094f
+        entity_id: light.wled_santi
+        domain: light
+    default: []
+  mode: restart

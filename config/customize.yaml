@@ -19,3 +19,13 @@ binary_sensor.door_sensor_front:
   friendly_name: Front Door
 input_boolean.rolluik:
   device_class: garage_door
+switch.keuken_schakelaar_relay:
+  friendly_name: Keuken Spotjes
+sensor.multi_sensor_beneden_temperatuur:
+  friendly_name: Beneden Temperatuur
+climate.woonkamer:
+  friendly_name: Thermostaat
+switch.schakelaar_santi_relay:
+  friendly_name: Spotjes Santi
+sensor.multi_upstairs_temp:
+  friendly_name: Boven Temperatuur
