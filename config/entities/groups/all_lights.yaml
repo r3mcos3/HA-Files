@@ -5,13 +5,13 @@ alle_lichten:
     - light.zolder
     - light.slaapkamer
     - light.slaapkamer_elyza
-    - switch.schakelaar_santi
+    - switch.schakelaar_santi_relay
     - light.wled_elyza
     - light.wled_santi
     - light.kelder
     - light.toilet_licht
     - light.woonkamer_spotjes
     - light.keuken
-    - switch.keuken_schakelaar
+    - switch.keuken_schakelaar_relay
     - switch.kast
     - light.tuin_groep
