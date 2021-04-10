@@ -73,6 +73,9 @@ trigger:
     at: !input 'time_before'
   - platform: state
     entity_id: !input boolean
+  - platform: numeric_state
+    entity_id: !input temp_sensor
+    below: !input min_temp
 action:
   - choose:
       - conditions:
