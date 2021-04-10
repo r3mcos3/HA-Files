@@ -28,4 +28,4 @@ climate.woonkamer:
 switch.schakelaar_santi_relay:
   friendly_name: Spotjes Santi
 sensor.multi_upstairs_temp:
-  friendly_name: Boven Temperatuur
+  friendly_name: Buiten Temperatuur
