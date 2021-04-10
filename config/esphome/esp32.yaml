@@ -1,0 +1,60 @@
+---
+substitutions:
+  devicename: esp32_mutli_sensor
+  upper_devicename: ESP32 Multi Sensor
+esphome:
+  name: $devicename
+  platform: ESP32
+  board: esp-wrover-kit
+
+wifi:
+  ssid: "NOT"
+  password: "HomeGoogle"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Esp32 Fallback Hotspot"
+    password: "lfQuEUz4YnST"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+esp32_ble_tracker:
+
+sensor:
+  - platform: xiaomi_lywsd03mmc
+    mac_address: "A4:C1:38:FB:E5:F7"
+    bindkey: "eef418daf699a0c188f3bfd17e4565a1"
+    temperature:
+      name: "Badkamer Temperatuur"
+    humidity:
+      name: "Badkamer Luchtvochtigheid"
+    battery_level:
+      name: "Badkamer Batterij Level"
+
+  - platform: xiaomi_lywsd03mmc
+    mac_address: "A4:C1:38:08:69:41"
+    bindkey: "eef418daf699a0c188f3bfd17e4565b2"
+    temperature:
+      name: "Slaapkamer Temperatuur"
+    humidity:
+      name: "Slaapkamer Luchtvochtigheid"
+    battery_level:
+      name: "Slaapkamer Batterij Level"
+
+  - platform: xiaomi_lywsd03mmc
+    mac_address: "A4:C1:38:3E:E2:26"
+    bindkey: "eef418daf699a0c188f3bfd17e4565c3"
+    temperature:
+      name: "Slaapkamer Santi Temperatuur"
+    humidity:
+      name: "Slaapkamer Santi Luchtvochtigheid"
+    battery_level:
+      name: "Slaapkamer Santi Batterij Level"
