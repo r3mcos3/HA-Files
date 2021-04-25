@@ -41,7 +41,7 @@ jobs:
       - name: ⤵️ Check out configuration from GitHub
         uses: actions/checkout@v2.3.4
       - name: 🚀 Run Home Assistant Configuration Check
-        uses: frenck/action-home-assistant@v1.0.3
+        uses: frenck/action-home-assistant@v1.0.4
         with:
           path: "./config"
           secrets: ./.stubs/secrets.yaml
@@ -54,7 +54,7 @@ jobs:
       - name: ⤵️ Check out configuration from GitHub
         uses: actions/checkout@v1
       - name: Set up Python 3.7
-        uses: actions/setup-python@v2.2.1
+        uses: actions/setup-python@v2.2.2
         with:
           python-version: 3.7
       - name: Install dependencies
