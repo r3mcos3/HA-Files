@@ -569,3 +569,46 @@
     entity_id: light.gang
     domain: light
   mode: single
+- id: '1618422777779'
+  alias: Verlichting - Nachtlampje Santi
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: b65dbb8a196ab5a4401b6c27bc17094f
+    entity_id: light.wled_santi
+    domain: light
+  condition: []
+  action:
+  - delay:
+      hours: 0
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+  - type: turn_off
+    device_id: b65dbb8a196ab5a4401b6c27bc17094f
+    entity_id: light.wled_santi
+    domain: light
+  mode: single
+- id: '1618654112911'
+  alias: Meldingen - Temperaturen Overzicht
+  description: ''
+  trigger:
+  - platform: time
+    at: '10:00'
+  - platform: state
+    entity_id: binary_sensor.next_alarm
+    to: 'on'
+    from: 'off'
+  condition: []
+  action:
+  - service: notify.mobile_app_in2023
+    data:
+      message: "De temperatuur beneden is {{ states('sensor.multi_sensor_beneden_temperatuur')\
+        \ }} C   Op Santis kamer is het {{ states('sensor.slaapkamer_santi_temperatuur')\
+        \ }} C  En op onze slaapkamer is het {{ states ('sensor.slaapkamer_temperatuur')\
+        \ }} C  In de badkamer is het {{ states ('sensor.badkamer_temperatuur') }}\
+        \ C  \nTemperatuur buiten is {{states ('sensor.multi_upstairs_temp')}}\nDe\
+        \ thermostaat is {{ states ('climate.woonkamer') }}"
+      title: Temperaturen Overzicht {{ now().strftime("%d-%m-%Y")  }}
+  mode: single
