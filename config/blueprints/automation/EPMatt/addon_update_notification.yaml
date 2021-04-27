@@ -175,20 +175,20 @@ action:
           - service: hassio.addon_update
             data:
               addon: !input 'addon'
-      - condition: template
-        value_template: '{{ update_success_notification }}'
-      - service: !input 'mobile_notify_service'
-        data:
-          title: !input 'update_success_notification_title'
-          message: !input 'update_success_notification_message'
-          data:
-            url: !input 'tap_action'
-            clickAction: !input 'tap_action'
-            tag: ahb_addon_notification_{{ addon }}
-            group: !input 'notification_group'
-            channel: !input 'notification_channel'
-            importance: !input 'notification_channel_importance'
-            color: !input 'notification_color'
+          - condition: template
+            value_template: '{{ update_success_notification }}'
+          - service: !input 'mobile_notify_service'
+            data:
+              title: !input 'update_success_notification_title'
+              message: !input 'update_success_notification_message'
+              data:
+                url: !input 'tap_action'
+                clickAction: !input 'tap_action'
+                tag: ahb_addon_notification_{{ addon }}
+                group: !input 'notification_group'
+                channel: !input 'notification_channel'
+                importance: !input 'notification_channel_importance'
+                color: !input 'notification_color'
       - conditions: '{{ trigger.to_state.state == "on" }}'
         sequence:
           - service: !input 'mobile_notify_service'
