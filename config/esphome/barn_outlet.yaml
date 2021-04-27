@@ -88,5 +88,5 @@ switch:
 
 text_sensor:
   - platform: version
-    name: "ESPHome Version"
+    name: "$upper_devicename ESPHome Version"
     hide_timestamp: 'true'

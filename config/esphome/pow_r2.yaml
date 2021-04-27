@@ -76,3 +76,4 @@ output:
 text_sensor:
   - platform: version
     name: "$upper_devicename ESPHome Version"
+    hide_timestamp: 'true'
