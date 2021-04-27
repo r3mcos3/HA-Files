@@ -1,18 +1,14 @@
+---
 blueprint:
   name: Send a mobile notification when add-on update is available
   description: 'Send a notification to the provided mobile devices whenever an update
     for the given Home Assistant add-on is available.
-
     Supports full notification customization, notification groups, auto-dismissal
     when the add-on is updated and button for starting the update directly from your
     notification tray,
-
     with optional notification after the update completed succesfully.
+    Full documentation for this blueprint is available [here](https://epmatt.github.io/awesome-ha-blueprints/docs/blueprints/automation/addon_update_notification).'
 
-
-    Full documentation for this blueprint is available [here](https://epmatt.github.io/awesome-ha-blueprints/docs/blueprints/automation/addon_update_notification).
-
-    '
   source_url: https://github.com/EPMatt/awesome-ha-blueprints/blob/main/blueprints/automation/addon_update_notification/addon_update_notification.yaml
   domain: automation
   input:
@@ -161,57 +157,57 @@ trigger_variables:
 mode: single
 max_exceeded: silent
 trigger:
-- platform: state
-  entity_id: !input 'addon_sensor_update_available'
-- platform: event
-  event_type: mobile_app_notification_action
-  event_data:
-    tag: ahb_addon_notification_{{ trigger_addon }}
-    action: ahb_addon_update_{{ trigger_addon }}
+  - platform: state
+    entity_id: !input 'addon_sensor_update_available'
+  - platform: event
+    event_type: mobile_app_notification_action
+    event_data:
+      tag: ahb_addon_notification_{{ trigger_addon }}
+      action: ahb_addon_update_{{ trigger_addon }}
 action:
-- variables:
-    version: '{{ states(addon_sensor_version) }}'
-    newest_version: '{{ states(addon_sensor_newest_version) }}'
-- choose:
-  - conditions: '{{ "event" in trigger and trigger.event.event_type == "mobile_app_notification_action"
-      }}'
-    sequence:
-    - service: hassio.addon_update
-      data:
-        addon: !input 'addon'
-    - condition: template
-      value_template: '{{ update_success_notification }}'
-    - service: !input 'mobile_notify_service'
-      data:
-        title: !input 'update_success_notification_title'
-        message: !input 'update_success_notification_message'
+  - variables:
+      version: '{{ states(addon_sensor_version) }}'
+      newest_version: '{{ states(addon_sensor_newest_version) }}'
+  - choose:
+      - conditions: '{{ "event" in trigger and trigger.event.event_type == "mobile_app_notification_action"
+          }}'
+        sequence:
+          - service: hassio.addon_update
+            data:
+              addon: !input 'addon'
+      - condition: template
+        value_template: '{{ update_success_notification }}'
+      - service: !input 'mobile_notify_service'
         data:
-          url: !input 'tap_action'
-          clickAction: !input 'tap_action'
-          tag: ahb_addon_notification_{{ addon }}
-          group: !input 'notification_group'
-          channel: !input 'notification_channel'
-          importance: !input 'notification_channel_importance'
-          color: !input 'notification_color'
-  - conditions: '{{ trigger.to_state.state == "on" }}'
-    sequence:
-    - service: !input 'mobile_notify_service'
-      data:
-        title: !input 'notification_title'
-        message: !input 'notification_message'
+          title: !input 'update_success_notification_title'
+          message: !input 'update_success_notification_message'
+          data:
+            url: !input 'tap_action'
+            clickAction: !input 'tap_action'
+            tag: ahb_addon_notification_{{ addon }}
+            group: !input 'notification_group'
+            channel: !input 'notification_channel'
+            importance: !input 'notification_channel_importance'
+            color: !input 'notification_color'
+      - conditions: '{{ trigger.to_state.state == "on" }}'
+        sequence:
+          - service: !input 'mobile_notify_service'
+            data:
+              title: !input 'notification_title'
+              message: !input 'notification_message'
+              data:
+                url: !input 'tap_action'
+                clickAction: !input 'tap_action'
+                tag: ahb_addon_notification_{{ addon }}
+                group: !input 'notification_group'
+                channel: !input 'notification_channel'
+                importance: !input 'notification_channel_importance'
+                color: !input 'notification_color'
+                actions: '{% set actions=[{"action": "ahb_addon_update_"+addon, "title":
+                  "Update"}] %} {{ actions if update_button else [] }}'
+    default:
+      - service: !input 'mobile_notify_service'
         data:
-          url: !input 'tap_action'
-          clickAction: !input 'tap_action'
-          tag: ahb_addon_notification_{{ addon }}
-          group: !input 'notification_group'
-          channel: !input 'notification_channel'
-          importance: !input 'notification_channel_importance'
-          color: !input 'notification_color'
-          actions: '{% set actions=[{"action": "ahb_addon_update_"+addon, "title":
-            "Update"}] %} {{ actions if update_button else [] }}'
-  default:
-  - service: !input 'mobile_notify_service'
-    data:
-      message: clear_notification
-      data:
-        tag: ahb_update_notification_{{ addon }}
+          message: clear_notification
+          data:
+            tag: ahb_update_notification_{{ addon }}
