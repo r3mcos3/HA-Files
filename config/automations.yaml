@@ -159,12 +159,23 @@
         data:
           temperature: 25
           hvac_mode: heat
-    default:
-    - service: climate.set_temperature
-      target:
-        device_id: ed7c8f19573f4541479758fe83398ed5
-      data:
-        hvac_mode: 'off'
+      - service: automation.turn_off
+        target:
+          entity_id: automation.verwarming_auto
+    - conditions:
+      - condition: state
+        entity_id: input_boolean.heating_boost
+        state: 'off'
+      sequence:
+      - service: climate.set_hvac_mode
+        data:
+          hvac_mode: 'off'
+        target:
+          entity_id: climate.woonkamer
+      - service: automation.turn_on
+        target:
+          entity_id: automation.verwarming_auto
+    default: []
   mode: single
 - id: '1615020314442'
   alias: Volume Control
@@ -612,3 +623,87 @@
         \ thermostaat is {{ states ('climate.woonkamer') }}"
       title: Temperaturen Overzicht {{ now().strftime("%d-%m-%Y")  }}
   mode: single
+- id: '1619510070414'
+  alias: Meldingen - ESPHome Addon Update
+  description: ''
+  use_blueprint:
+    path: EPMatt/addon_update_notification.yaml
+    input:
+      notification_channel_importance: default
+      addon: a0d7b954_esphome
+      addon_name: ESPHome
+      addon_sensor_version: sensor.esphome_addon_version
+      addon_sensor_newest_version: sensor.esphome_newest_version
+      addon_sensor_update_available: binary_sensor.esphome_update_available
+      mobile_notify_service: notify.mobile_app_in2023
+      notification_color: red
+- id: '1619511440525'
+  alias: Meldingen - Samba Addon Update
+  description: ''
+  use_blueprint:
+    path: EPMatt/addon_update_notification.yaml
+    input:
+      notification_channel_importance: default
+      addon: core_samba
+      addon_name: Samba
+      addon_sensor_version: sensor.samba_share_version
+      addon_sensor_newest_version: sensor.samba_share_newest_version
+      addon_sensor_update_available: binary_sensor.samba_share_update_available
+      mobile_notify_service: notify.mobile_app_in2023
+      notification_color: red
+- id: '1619511514150'
+  alias: Meldingen - MariaDB Addon Update
+  description: ''
+  use_blueprint:
+    path: EPMatt/addon_update_notification.yaml
+    input:
+      notification_channel_importance: default
+      addon: core_mariadb
+      addon_sensor_version: sensor.mariadb_version
+      addon_sensor_newest_version: sensor.mariadb_newest_version
+      addon_sensor_update_available: binary_sensor.mariadb_update_available
+      notification_color: red
+      mobile_notify_service: notify.mobile_app_in2023
+      addon_name: MariaDB
+- id: '1619511585178'
+  alias: Meldingen - Google Drive Backup Addon Update
+  description: ''
+  use_blueprint:
+    path: EPMatt/addon_update_notification.yaml
+    input:
+      notification_channel_importance: default
+      addon: cebe7a76_hassio_google_drive_backup
+      addon_name: Google Drive Backup
+      addon_sensor_version: sensor.home_assistant_google_drive_backup_version
+      addon_sensor_newest_version: sensor.home_assistant_google_drive_backup_newest_version
+      addon_sensor_update_available: binary_sensor.home_assistant_google_drive_backup_update_available
+      mobile_notify_service: notify.mobile_app_in2023
+      notification_color: red
+- id: '1619511679117'
+  alias: Meldingen - SSH Addon Update
+  description: ''
+  use_blueprint:
+    path: EPMatt/addon_update_notification.yaml
+    input:
+      notification_channel_importance: default
+      addon: a0d7b954_ssh
+      addon_name: SSH Addon
+      addon_sensor_version: sensor.ssh_web_terminal_version
+      addon_sensor_newest_version: sensor.ssh_web_terminal_newest_version
+      addon_sensor_update_available: binary_sensor.ssh_web_terminal_update_available
+      mobile_notify_service: notify.mobile_app_in2023
+      notification_color: red
+- id: '1619511772670'
+  alias: Meldingen - Chrony Addon Update
+  description: ''
+  use_blueprint:
+    path: EPMatt/addon_update_notification.yaml
+    input:
+      notification_channel_importance: default
+      addon: a0d7b954_chrony
+      addon_name: Chrony
+      addon_sensor_version: sensor.chrony_version
+      addon_sensor_newest_version: sensor.chrony_newest_version
+      addon_sensor_update_available: binary_sensor.chrony_update_available
+      mobile_notify_service: notify.mobile_app_in2023
+      notification_color: red
