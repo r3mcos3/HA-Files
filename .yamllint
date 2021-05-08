@@ -7,7 +7,8 @@ ignore: |
   config/themes/
   config/scripts.yaml
   config/customize.yaml
-  config\entities\sensors\updates.yaml
+  config/entities/sensors/updates.yaml
+  config/blueprints
 rules:
   braces:
     level: error
