@@ -124,17 +124,3 @@ alert:
       tag: 'hacs-update-available'
       url: 'http://hassio.local/hacs/installed'
 
-  # Addons have updates available - unacknowledgeable, auto-dismiss, me only
-  addon_update_available:
-    name: Addons have updates
-    entity_id: binary_sensor.updater_addons
-    state: 'on'
-    can_acknowledge: false
-    repeat: 360
-    title: "Updates available for {{ states('sensor.supervisor_updates') }} HA addon{% if states('sensor.supervisor_updates') | int > 1 %}s{% endif %}"
-    message: ""
-    notifiers:
-      - mobile_app_in2023
-    data:
-      tag: 'addon-update-available'
-      url: 'http://hassio.local/hassio/dashboard'
